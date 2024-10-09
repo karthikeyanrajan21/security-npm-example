@@ -14,9 +14,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup JFrog CLI with OIDC
+      - name: Set up JFrog CLI
         uses: jfrog/setup-jfrog-cli@v4
+        env:
+          JF_URL: https://knra.jfrog.io 
         with:
-          JF_URL: https://knra.jfrog.io  # Use the correct input key for JFrog URL
-          oidc-provider-name: github-jfrog
+          oidc-provider-name: github-jfrog 
           oidc-audience: my-aud
