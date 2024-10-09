@@ -1,8 +1,10 @@
 name: "JFrog  NPM Integration Example"
 on: push
 
-permissions:
+  permissions:
   id-token: write
+  contents: read
+
 jobs:
   build:
      runs-on: ubuntu-latest
