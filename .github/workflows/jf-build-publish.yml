@@ -25,13 +25,13 @@ jobs:
         uses: actions/setup-node@v3
            
       - name: Set CLI Config
-        run: jf npm-config --global=true --repo-resolve=knmvn-libs-release --repo-deploy=knmvn-libs-release
+        run: jf npm-config --global=true --repo-resolve=knmvn-maven-remote --repo-deploy=knmvn-maven-remote
 
       - name: Install Deps
         run: jf npm install
            
       - name: Publish
-        run: jf npm publish --registry=https://knra.jfrog.io/artifactory/knmvn-libs-release
+        run: jf npm publish --registry=https://knra.jfrog.io/artifactory/knmvn-maven-remote
          
       - name: Publish Build info With JFrog CLI
         run: |
