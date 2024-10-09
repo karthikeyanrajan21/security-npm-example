@@ -17,29 +17,6 @@ jobs:
       - name: Setup JFrog CLI with OIDC
         uses: jfrog/setup-jfrog-cli@v4
         with:
-          jfrog-url: https://knra.jfrog.io
+          JF_URL: https://knra.jfrog.io  # Use the correct input key for JFrog URL
           oidc-provider-name: github-jfrog
           oidc-audience: my-aud
-      #  - name: Setup Node npm
-      #    uses: actions/setup-node@v3
-           
-      #  - name: Set CLI Config
-      #    run: jf npm-config --global=true --repo-resolve=npm-virtual --repo-deploy=npm-virtual
-
-         
-           
-      #  - name: Install Deps
-      #    run: jf npm install
-           
-         
-      #  - name: Publish
-      #    run: jf npm publish
-         
-      #  - name: Publish Build info With JFrog CLI
-      #    run: |
-      #     # Collect environment variables for the build
-      #     jf rt build-collect-env
-      #     # Collect VCS details from git and add them to the build
-      #     jf rt build-add-git
-      #     # Publish build info
-      #     jf rt build-publish
