@@ -1,6 +1,7 @@
 name: "JFrog NPM Integration Example"
+
 on: 
-  push:
+  push
 
 permissions:
   id-token: write
@@ -11,13 +12,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Set up JFrog CLI
-        uses: jfrog/setup-jfrog-cli@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16' # Specify the version you need
+
+      - name: Setup JFrog CLI with OIDC
+        uses: jfrog/setup-jfrog-cli@v3
         env:
-          JF_URL: https://knra.jfrog.io 
+          JF_URL: https://knra.jfrog.io # Your JFrog instance URL
         with:
           oidc-provider-name: github-jfrog 
           oidc-audience: my-aud
+
+      - name: Authenticate and Configure npm for JFrog
+        run: |
+          npm config set always-auth true
+          npm config set //knra.jfrog.io/artifactory/api/npm/knnpm/:_authToken=$(jfrog rt c --interactive=false | jq -r '.access_token')
+        env:
+          JFROG_CLI_OIDC: true
+
+      - name: Install npm dependencies
+        run: npm install
+
+      - name: Publish to JFrog Artifactory
+        run: npm publish
