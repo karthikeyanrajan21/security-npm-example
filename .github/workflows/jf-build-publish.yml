@@ -1,5 +1,7 @@
 name: "JFrog NPM Integration Example"
-on: push
+
+on: 
+  push
 
 permissions:
   id-token: write
@@ -13,31 +15,30 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup JFrog CLI OIDC
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16' # Specify the version you need
+
+      - name: Setup JFrog CLI with OIDC
         uses: jfrog/setup-jfrog-cli@v3
         env:
-          JF_URL: https://knra.jfrog.io
+          JF_URL: https://knra.jfrog.io # Your JFrog instance URL
         with:
           oidc-provider-name: github-jfrog 
           oidc-audience: my-aud
 
-      - name: Setup Node npm
-        uses: actions/setup-node@v3
-           
-      - name: Set CLI Config
-        run: jf npm-config --global=true --repo-resolve=knnpm --repo-deploy=knnpm
-
-      - name: Install Deps
-        run: jf npm install
-           
-      - name: Publish
-        run: jf npm publish --registry=https://knra.jfrog.io/artifactory/knnpm
-         
-      - name: Publish Build info With JFrog CLI
+      - name: Configure npm to use JFrog Artifactory registry
         run: |
-          # Collect environment variables for the build
-          jf rt build-collect-env
-          # Collect VCS details from git and add them to the build
-          jf rt build-add-git
-          # Publish build info
-          jf rt build-publish
+          npm config set registry https://knra.jfrog.io/artifactory/api/npm/knnpm/
+          npm config set always-auth true
+          npm config set //knra.jfrog.io/artifactory/api/npm/knnpm/:_authToken=$(jfrog rt c --interactive=false | jq -r '.access_token')
+        env:
+          JFROG_CLI_OIDC: true
+
+      - name: Install npm dependencies
+        run: npm install
+
+      - name: Publish to JFrog Artifactory
+        run: npm publish
+      
