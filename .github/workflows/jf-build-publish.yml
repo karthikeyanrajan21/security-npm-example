@@ -21,26 +21,26 @@ jobs:
           oidc-audience: my-aud
 
            
-       - name: Setup Node npm
-         uses: actions/setup-node@v3
+      #  - name: Setup Node npm
+      #    uses: actions/setup-node@v3
            
-       - name: Set CLI Config
-         run: jf npm-config --global=true --repo-resolve=npm-virtual --repo-deploy=npm-virtual
+      #  - name: Set CLI Config
+      #    run: jf npm-config --global=true --repo-resolve=npm-virtual --repo-deploy=npm-virtual
 
          
            
-       - name: Install Deps
-         run: jf npm install
+      #  - name: Install Deps
+      #    run: jf npm install
            
          
-       - name: Publish
-         run: jf npm publish
+      #  - name: Publish
+      #    run: jf npm publish
          
-       - name: Publish Build info With JFrog CLI
-         run: |
-          # Collect environment variables for the build
-          jf rt build-collect-env
-          # Collect VCS details from git and add them to the build
-          jf rt build-add-git
-          # Publish build info
-          jf rt build-publish
+      #  - name: Publish Build info With JFrog CLI
+      #    run: |
+      #     # Collect environment variables for the build
+      #     jf rt build-collect-env
+      #     # Collect VCS details from git and add them to the build
+      #     jf rt build-add-git
+      #     # Publish build info
+      #     jf rt build-publish
