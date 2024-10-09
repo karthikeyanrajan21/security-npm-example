@@ -30,10 +30,11 @@ jobs:
 
       - name: Authenticate and Configure npm for JFrog
         run: |
-          npm config set always-auth true
-          npm config set //knra.jfrog.io/artifactory/api/npm/knnpm/:_authToken=$(jfrog rt c --interactive=false | jq -r '.access_token')
-        env:
-          JFROG_CLI_OIDC: true
+          # Authenticate with JFrog CLI using OIDC and retrieve the access token
+          export JFROG_TOKEN=$(jfrog rt c --interactive=false | jq -r '.access_token')
+
+          # Configure npm to use JFrog Artifactory repository with the authentication token
+          npm config set //knra.jfrog.io/artifactory/api/npm/knnpm/:_authToken=$JFROG_TOKEN
 
       - name: Install npm dependencies
         run: npm install
